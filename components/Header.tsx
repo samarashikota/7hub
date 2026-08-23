@@ -11,16 +11,16 @@ export default function Header() {
       <div className="mx-auto max-w-5xl px-5 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-baseline gap-2">
           <span className="font-display text-2xl tracking-wide text-marquee marquee-title">
-            SESSÃO
+            7
           </span>
-          <span className="font-display text-2xl tracking-wide text-ink">CONTÍNUA</span>
+          <span className="font-display text-2xl tracking-wide text-ink">HUB</span>
         </Link>
 
         <nav className="flex items-center gap-4 font-mono text-xs uppercase tracking-wider">
           {status === "authenticated" ? (
             <>
               <Link href="/dashboard" className="text-ink-muted hover:text-marquee transition">
-                Meus ingressos
+                Meu Hub
               </Link>
               <span className="text-ink-faint hidden sm:inline">{session.user?.name}</span>
               <button

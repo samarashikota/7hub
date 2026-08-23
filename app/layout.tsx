@@ -4,7 +4,7 @@ import Providers from "@/components/Providers";
 import Header from "@/components/Header";
 
 export const metadata: Metadata = {
-  title: "Sessão Contínua — seu arquivo de filmes e séries assistidos",
+  title: "7Hub — seu arquivo de filmes e séries assistidos",
   description:
     "Guarde o que você já assistiu, com capa oficial, streaming atual e sua nota pessoal.",
 };

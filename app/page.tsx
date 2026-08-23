@@ -10,18 +10,18 @@ export default async function Home() {
       <section className="grid gap-10 md:grid-cols-2 items-center">
         <div>
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-teal-stub mb-3">
-            Seu arquivo pessoal · Sessão encerrada
+            Seu arquivo pessoal
           </p>
           <h1 className="font-display text-5xl sm:text-6xl leading-[0.95] tracking-wide text-ink">
-            Todo filme que
+            Todo filme e série que
             <br />
             você já assistiu,
             <br />
-            <span className="text-marquee">guardado num ingresso.</span>
+            <span className="text-marquee">arquivado.</span>
           </h1>
           <p className="mt-6 text-ink-muted max-w-md leading-relaxed">
-            Cadastre-se, busque o título e a Sessão Contínua traz a capa oficial e mostra em
-            qual streaming ele está disponível agora — você só precisa dar a nota, se quiser.
+            Cadastre-se, busque o título e o 7Hub traz a capa oficial e mostra em
+            qual streaming ele está disponível agora - você também pode dar uma nota, se quiser.
           </p>
           <div className="mt-8 flex gap-3">
             {session ? (
@@ -29,7 +29,7 @@ export default async function Home() {
                 href="/dashboard"
                 className="rounded-full bg-marquee text-reel-bg font-semibold px-6 py-3 hover:bg-marquee-soft transition"
               >
-                Ir para meus ingressos
+                Ir para meu Hub
               </Link>
             ) : (
               <>
@@ -61,7 +61,7 @@ export default async function Home() {
           <div className="p-5 flex flex-col justify-between">
             <div>
               <p className="font-mono text-[10px] uppercase tracking-wider text-teal-stub">
-                Admissão única
+                FILME/SÉRIE
               </p>
               <p className="font-display text-2xl text-ink leading-tight mt-1">
                 Próximo da sua lista
