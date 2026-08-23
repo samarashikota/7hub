@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  // SQLite para rodar local sem nenhuma configuração.
+  // Para produção "de verdade" (Vercel etc.) troque para "postgresql"
+  // e aponte DATABASE_URL para um banco Postgres (ex: Neon, Supabase, Railway).
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  titles       Title[]
+}
+
+model Title {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+
+  tmdbId     Int
+  mediaType  String   // "movie" | "tv"
+  name       String
+  year       String?
+  posterUrl  String?
+  overview   String?
+
+  providers  String?  // JSON string com os streamings disponíveis (nome + logo) no momento em que foi salvo
+  rating     Int?     // nota opcional de 0 a 10
+  note       String?  // comentário opcional
+
+  watchedAt  DateTime @default(now())
+
+  @@unique([userId, tmdbId, mediaType])
+  @@index([userId])
+}

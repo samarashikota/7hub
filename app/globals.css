@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display: "Bebas Neue", "Arial Narrow", sans-serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+html,
+body {
+  background-color: #12141c;
+  color: #f2efe9;
+}
+
+body {
+  font-family: var(--font-body);
+}
+
+::selection {
+  background: #e8a33d;
+  color: #12141c;
+}
+
+@layer components {
+  .input {
+    @apply w-full rounded-md bg-reel-card2 border border-reel-line px-3 py-2.5 text-ink placeholder:text-ink-faint outline-none focus:border-marquee focus:ring-1 focus:ring-marquee transition;
+  }
+}
+
+/* --- Assinatura visual: canhoto de ingresso de cinema --- */
+.ticket {
+  position: relative;
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  background: #1b1e2a;
+  border: 1px solid #31364a;
+  border-radius: 10px;
+  overflow: visible;
+}
+
+/* friso perfurado entre a capa e as informações, como um ingresso destacável */
+.ticket::before {
+  content: "";
+  position: absolute;
+  left: 92px;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 2px dashed #454b64;
+}
+
+.ticket::after {
+  content: "";
+  position: absolute;
+  left: 92px;
+  top: -7px;
+  bottom: -7px;
+  width: 14px;
+  transform: translateX(-7px);
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 8px,
+    #12141c 8px,
+    #12141c 16px
+  );
+  background-color: transparent;
+  -webkit-mask-image: radial-gradient(circle 7px at 7px 8px, black 99%, transparent 100%);
+  mask-image: radial-gradient(circle 7px at 7px 8px, black 99%, transparent 100%);
+  -webkit-mask-repeat: repeat-y;
+  mask-repeat: repeat-y;
+  -webkit-mask-size: 14px 16px;
+  mask-size: 14px 16px;
+}
+
+.stub-notch {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: #12141c;
+  left: 85px;
+  z-index: 2;
+}
+
+.film-grain {
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.04) 1px, transparent 0);
+  background-size: 20px 20px;
+}
+
+@keyframes marquee-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  94% {
+    opacity: 0.6;
+  }
+  96% {
+    opacity: 1;
+  }
+}
+
+.marquee-title {
+  animation: marquee-flicker 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-title {
+    animation: none;
+  }
+}
