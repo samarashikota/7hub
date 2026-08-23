@@ -3,11 +3,12 @@ generator client {
 }
 
 datasource db {
-  // SQLite para rodar local sem nenhuma configuração.
-  // Para produção "de verdade" (Vercel etc.) troque para "postgresql"
-  // e aponte DATABASE_URL para um banco Postgres (ex: Neon, Supabase, Railway).
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  // PostgreSQL hospedado no Supabase.
+  // DATABASE_URL = conexão via pooler (porta 6543, pgbouncer=true) — usada pelo app.
+  // DIRECT_URL   = conexão direta (porta 5432) — usada só para criar/migrar tabelas.
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {

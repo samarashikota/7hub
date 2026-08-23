@@ -13,7 +13,11 @@ opcional para cada título.
 - **Nota opcional** (0 a 10) e comentário livre por título.
 
 Stack: **Next.js 14** (App Router, front-end e back-end juntos) + **Prisma** +
-**SQLite** + **NextAuth** + **TailwindCSS**.
+**PostgreSQL (Supabase)** + **NextAuth** + **TailwindCSS**.
+
+> 📌 Se você chegou aqui a partir do zip do projeto, o passo a passo
+> completo e ilustrado (Supabase, GitHub e Vercel do zero) está no arquivo
+> `GUIA-PASSO-A-PASSO.md` — este README é a versão resumida/técnica.
 
 ---
 
@@ -21,7 +25,8 @@ Stack: **Next.js 14** (App Router, front-end e back-end juntos) + **Prisma** +
 
 ### Pré-requisitos
 - Node.js 18 ou superior
-- Uma API key gratuita do TMDB (passo a passo abaixo)
+- Uma conta gratuita no [Supabase](https://supabase.com) (banco de dados)
+- Uma API key gratuita do [TMDB](https://www.themoviedb.org/)
 
 ### Passo a passo
 
@@ -33,36 +38,19 @@ npm install
 cp .env.example .env
 ```
 
-Edite o `.env` e preencha:
-
-```env
-DATABASE_URL="file:./dev.db"
-NEXTAUTH_SECRET="gere-um-valor-abaixo"
-NEXTAUTH_URL="http://localhost:3000"
-TMDB_API_KEY="sua-chave-aqui"
-```
-
-Para gerar o `NEXTAUTH_SECRET`, rode no terminal:
+Edite o `.env` e preencha `DATABASE_URL` e `DIRECT_URL` com as connection
+strings do seu projeto Supabase (Project Settings → Database → Connection
+string), `TMDB_API_KEY` com sua chave do TMDB, e gere o `NEXTAUTH_SECRET`:
 
 ```bash
 openssl rand -base64 32
 ```
 
-### Como conseguir a API key do TMDB (gratuita)
-
-1. Crie uma conta em https://www.themoviedb.org/signup
-2. Vá em **Configurações → API** (ou acesse diretamente
-   https://www.themoviedb.org/settings/api)
-3. Clique em **"Create"** / **"Solicitar uma API Key"**, escolha o tipo
-   **"Developer"** e preencha o formulário (pode usar "uso pessoal" como
-   finalidade)
-4. Copie o valor de **"API Key (v3 auth)"** e cole no `.env` em `TMDB_API_KEY`
-
-### Criar o banco e subir o app
+### Criar as tabelas no banco e subir o app
 
 ```bash
-# cria o arquivo dev.db com as tabelas do schema
-npm run db:push
+# cria as tabelas do schema no Supabase
+npx prisma db push
 
 # roda em modo desenvolvimento
 npm run dev
@@ -99,36 +87,17 @@ git push -u origin main
 
 ---
 
-## 3. Deploy (colocar no ar de verdade)
+## 3. Deploy na Vercel (com Supabase)
 
-Ponto de atenção importante sobre o banco: **SQLite é um arquivo em disco**.
-Em plataformas *serverless* (como a Vercel), o sistema de arquivos é
-temporário e o arquivo do banco seria apagado a cada novo deploy/instância —
-ou seja, o app até funciona, mas você perderia os dados salvos com o tempo.
+1. Importe o repositório do GitHub em https://vercel.com/new
+2. Em **Environment Variables**, adicione: `DATABASE_URL`, `DIRECT_URL`,
+   `NEXTAUTH_SECRET`, `NEXTAUTH_URL` (a URL pública que a Vercel vai te dar,
+   ex: `https://sessao-continua.vercel.app`) e `TMDB_API_KEY`.
+3. Clique em **Deploy**.
 
-Duas opções boas:
-
-### Opção A — manter SQLite, hospedar em um serviço com disco persistente
-Plataformas como **Render**, **Railway** ou **Fly.io** oferecem disco
-persistente de graça/baixo custo. Nelas o SQLite funciona normalmente:
-1. Suba o repositório do GitHub na plataforma escolhida.
-2. Configure um *volume*/disco persistente apontando para a pasta do projeto
-   (ou para onde `DATABASE_URL` aponta).
-3. Configure as variáveis de ambiente (`DATABASE_URL`, `NEXTAUTH_SECRET`,
-   `NEXTAUTH_URL` com a URL pública, `TMDB_API_KEY`).
-4. Comando de build: `npm run build` · comando de start: `npm run start`.
-
-### Opção B — deploy na Vercel trocando para Postgres
-A Vercel é a forma mais simples de publicar um app Next.js, mas exige um
-banco externo:
-1. Crie um banco Postgres grátis (ex: [Neon](https://neon.tech) ou
-   [Supabase](https://supabase.com)).
-2. No `prisma/schema.prisma`, troque `provider = "sqlite"` por
-   `provider = "postgresql"`.
-3. Rode `npm run db:push` uma vez apontando `DATABASE_URL` para o Postgres,
-   para criar as tabelas.
-4. Importe o repositório na Vercel (https://vercel.com/new), configure as
-   mesmas variáveis de ambiente do `.env` e publique.
+Como o banco já roda no Supabase (fora da Vercel), os dados persistem
+normalmente entre deploys — sem o problema que existiria com SQLite em uma
+plataforma serverless.
 
 ---
 
