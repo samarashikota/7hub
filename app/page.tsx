@@ -2,6 +2,20 @@ import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
+// Capas do TMDB expandidas (Filmes e Séries aclamadas)
+const samplePosters = [
+  "/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg", // Um Sonho de Liberdade
+  "/8c4a8kE7PizaGQQnditMmI1xbRp.jpg", // Matrix
+  "/rCzpDGLbOoPwLjy3OAm5NUPOTrC.jpg", // O Senhor dos Anéis
+  "/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg", // Vingadores
+  "/qJ2tW6WMUDux911r6m7haRef0WH.jpg", // Batman: O Cavaleiro das Trevas
+  "/ggFHVNu6YYI5L9pCfOacjizRGt.jpg", // Breaking Bad
+  "/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg", // Game of Thrones
+  "/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg", // Oppenheimer
+  "/d5NXSklXo0qyIYkgV94XAgMIckC.jpg", // Dune
+  "/apbrbWs8M9lyOpJYU5WXrpFbk1Z.jpg", // Dark
+];
+
 export default async function Home() {
   const session = await getServerSession(authOptions);
 
@@ -17,7 +31,7 @@ export default async function Home() {
             <br />
             você já assistiu,
             <br />
-            <span className="text-marquee">arquivado.</span>
+            <span className="text-marquee">registrado.</span>
           </h1>
           <p className="mt-6 text-ink-muted max-w-md leading-relaxed">
             Cadastre-se, busque o título e o 7Hub traz a capa oficial e mostra em
@@ -76,16 +90,52 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* NOVO SLIDER DE CAPAS (DE PONTA A PONTA) */}
+      <section className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] py-4">
+        {/* Container para alinhar o texto com o resto do site */}
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 mb-4">
+          <p className="font-mono text-[10px] uppercase tracking-wider text-ink-faint">
+            Explore milhares de títulos
+          </p>
+        </div>
+        
+        {/* O scroll de ponta a ponta com degradê nas duas pontas */}
+        <div 
+          className="flex gap-4 overflow-x-auto snap-x snap-mandatory px-5 sm:px-8 pb-8 pt-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          style={{ 
+            maskImage: "linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%)", 
+            WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%)" 
+          }}
+        >
+          {samplePosters.map((path, i) => (
+            <div
+              key={i}
+              // Tamanhos responsivos (120px mobile -> 180px desktop)
+              className="w-[120px] sm:w-[140px] md:w-[160px] lg:w-[180px] aspect-[2/3] shrink-0 snap-start rounded-lg overflow-hidden border border-reel-line shadow-lg bg-reel-card2 hover:-translate-y-2 hover:shadow-2xl hover:border-marquee transition-all duration-300"
+            >
+              <img
+                // Atualizado para /w342 para as imagens não perderem qualidade em telas maiores
+                src={`https://image.tmdb.org/t/p/w342${path}`}
+                alt="Capa de filme ou série"
+                className="w-full h-full object-cover"
+                loading="lazy"
+                draggable="false"
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="grid gap-6 sm:grid-cols-3">
         <Feature
           eyebrow="Bilheteria"
           title="Cadastro seguro"
-          text="Senha protegida com hash (bcrypt) e sessão autenticada — só você acessa o seu arquivo."
+          text="Senha protegida com hash (bcrypt) e sessão autenticada - só você acessa o seu arquivo."
         />
         <Feature
           eyebrow="Cartaz"
           title="Capa oficial automática"
-          text="Ao buscar o título, a capa e a sinopse vêm direto da base do TMDB."
+          text="Ao buscar o título, a capa e a sinopse vêm direto da base do TMDB (The Movie Database)."
         />
         <Feature
           eyebrow="Onde assistir"

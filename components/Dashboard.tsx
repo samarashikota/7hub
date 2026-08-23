@@ -32,7 +32,7 @@ export default function Dashboard() {
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-teal-stub mb-2">
           Bilheteria
         </p>
-        <h1 className="font-display text-4xl text-ink">Meus ingressos</h1>
+        <h1 className="font-display text-4xl text-ink">Meus filmes e séries</h1>
       </div>
 
       <SearchBox onAdded={load} />
@@ -45,9 +45,9 @@ export default function Dashboard() {
 
       {titles?.length === 0 && (
         <div className="border border-dashed border-reel-line rounded-lg p-10 text-center">
-          <p className="font-display text-2xl text-ink-muted">Sessão vazia, por enquanto.</p>
+          <p className="font-display text-2xl text-ink-muted">Sem filmes e séries marcados como assistidos, por enquanto.</p>
           <p className="text-ink-faint text-sm mt-2">
-            Busque um filme ou série acima para carimbar seu primeiro ingresso.
+            Busque um filme ou série acima para marcar sua primeira mídia.
           </p>
         </div>
       )}

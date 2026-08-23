@@ -58,7 +58,7 @@ export default function SearchBox({ onAdded }: { onAdded: () => void }) {
         setMessage(data.error ?? "Não foi possível adicionar.");
         return;
       }
-      setMessage(`"${item.name}" carimbado como assistido.`);
+      setMessage(`"${item.name}" marcado como assistido.`);
       onAdded();
     } finally {
       setAddingId(null);
