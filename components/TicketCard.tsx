@@ -18,6 +18,16 @@ export type SavedTitle = {
   providers: Provider[];
 };
 
+// Converte a data guardada (ISO, em UTC) para o formato yyyy-mm-dd que o
+// input type="date" espera, usando o horário LOCAL para não pular de dia.
+function toDateInputValue(isoDate: string) {
+  const d = new Date(isoDate);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 export default function TicketCard({
   title,
   onChanged,
@@ -27,6 +37,7 @@ export default function TicketCard({
 }) {
   const [rating, setRating] = useState<string>(title.rating?.toString() ?? "");
   const [note, setNote] = useState(title.note ?? "");
+  const [watchedAt, setWatchedAt] = useState(toDateInputValue(title.watchedAt));
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -39,6 +50,9 @@ export default function TicketCard({
         body: JSON.stringify({
           rating: rating === "" ? null : Number(rating),
           note: note.trim() === "" ? null : note.trim(),
+          // meio-dia (12:00) evita que o fuso horário jogue a data escolhida
+          // para o dia anterior ou seguinte ao converter para UTC
+          watchedAt: watchedAt ? `${watchedAt}T12:00:00` : undefined,
         }),
       });
       setEditing(false);
@@ -136,6 +150,15 @@ export default function TicketCard({
           </div>
         ) : (
           <div className="mt-4 space-y-3">
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-xs text-ink-muted">Assistido em</span>
+              <input
+                type="date"
+                value={watchedAt}
+                onChange={(e) => setWatchedAt(e.target.value)}
+                className="input w-auto py-1.5"
+              />
+            </div>
             <div className="flex items-center gap-2">
               <span className="font-mono text-xs text-ink-muted">Nota (0–10, opcional)</span>
               <input

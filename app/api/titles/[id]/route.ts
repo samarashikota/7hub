@@ -16,7 +16,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   }
 
   const body = await req.json();
-  const data: { rating?: number | null; note?: string | null } = {};
+  const data: { rating?: number | null; note?: string | null; watchedAt?: Date } = {};
 
   if ("rating" in body) {
     data.rating =
@@ -24,6 +24,12 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   }
   if ("note" in body) {
     data.note = body.note ? String(body.note).slice(0, 2000) : null;
+  }
+  if ("watchedAt" in body && body.watchedAt) {
+    const parsed = new Date(body.watchedAt);
+    if (!isNaN(parsed.getTime())) {
+      data.watchedAt = parsed;
+    }
   }
 
   const title = await prisma.title.update({ where: { id: params.id }, data });
